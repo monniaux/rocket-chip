@@ -1,6 +1,9 @@
 {
   "hardfloat": {
-    "scalaVersion": "2.12.8"
+    "scalaVersion": "2.12.8",
+    "dependencies": [
+      "edu.berkeley.cs::chisel3:3.4.3"
+    ]
   },
   "rocketchipMacros": {
     "scalaVersion": "2.12.8",
@@ -11,13 +14,20 @@
   "rocketchip": {
     "scalaVersion": "2.12.8",
     "dependencies": [
-      "org.json4s::json4s-jackson:3.5.3"
+      "org.json4s::json4s-jackson:3.5.3",
+      "edu.berkeley.cs::chisel3:3.4.3"
     ]
   },
   "macrosParadise": {
     "scalaVersion": "2.12.8",
     "dependencies": [
       "org.scalamacros:::paradise:2.1.0"
+    ]
+  },
+  "chisel3Plugin": {
+    "scalaVersion": "2.12.8",
+    "dependencies": [
+      "edu.berkeley.cs:::chisel3-plugin:3.4.3"
     ]
   }
 }

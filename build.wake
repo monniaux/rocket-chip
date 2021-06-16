@@ -4,12 +4,33 @@ publish ivyDepLocations = rocketChipRoot, Nil
 
 def hardfloatRoot = findGitRepositoryWithFallback "hardfloat"
 
+def readIvyDep regex =
+  require Pass ivyDepsJSON = readIvyDepsJSON here
+  require Some depString = ivyDepsJSON // regex // `dependencies` | getJString
+  else Fail (makeError "{regex.regExpToString} ivy dependency not found in {here}/ivydependencies.json!")
+  require Some dep = stringToIvyDep depString
+  else Fail (makeError "Invalid {regex.regExpToString} dependency string: '{depString}'")
+  Pass dep
+
+def macrosParadiseIvyDep = readIvyDep `macrosParadise`
+
+def chisel3PluginIvyDep = readIvyDep `chisel3Plugin`
+
+global def addMacrosParadiseCompilerPlugin module =
+  match macrosParadiseIvyDep
+    Pass dep = module | editScalaModuleCompilerPlugins (dep, _)
+    Fail err = module | editScalaModuleError (orElse (Some err))
+
+global def addChisel3Plugin module =
+  match chisel3PluginIvyDep
+    Pass dep = module | editScalaModuleCompilerPlugins (dep, _)
+    Fail err = module | editScalaModuleError (orElse (Some err))
+
 global def hardfloatScalaModule =
   makeScalaModuleFromJSON here "hardfloat"
   | setScalaModuleRootDir hardfloatRoot
-  | setScalaModuleDeps (chisel3ScalaModule, Nil)
   | setScalaModuleScalacOptions ("-Xsource:2.11", Nil)
-  | addChisel3CompilerPlugin
+  | addChisel3Plugin
 
 global def rocketchipMacros =
   makeScalaModuleFromJSON here "rocketchipMacros"
@@ -20,7 +41,6 @@ global def rocketchipScalaModule =
   def deps =
     rocketchipMacros,
     hardfloatScalaModule,
-    hardfloatScalaModule,
     apiConfigChipsallianceScalaModule,
     Nil
   makeScalaModuleFromJSON here "rocketchip"
@@ -28,7 +48,7 @@ global def rocketchipScalaModule =
   | setScalaModuleDeps deps
   | setScalaModuleScalacOptions ("-Xsource:2.11", Nil)
   | addMacrosParadiseCompilerPlugin
-  | addChisel3CompilerPlugin
+  | addChisel3Plugin
 
 def vlsi_mem_gen = source "{rocketChipRoot}/scripts/vlsi_mem_gen"
 def vlsi_rom_gen = source "{rocketChipRoot}/scripts/vlsi_rom_gen"
