@@ -153,7 +153,8 @@ class FPUDecoder(implicit p: Parameters) extends FPUModule()(p) {
           FNMADD_D -> List(N,Y,Y,Y,Y,N,N,D,D,N,N,N,Y,N,N,Y),
           FNMSUB_D -> List(N,Y,Y,Y,Y,N,N,D,D,N,N,N,Y,N,N,Y),
           FDIV_D   -> List(N,Y,Y,Y,N,N,N,D,D,N,N,N,N,Y,N,Y),
-          FSQRT_D  -> List(N,Y,Y,N,N,N,X,D,D,N,N,N,N,N,Y,Y))
+          FSQRT_D  -> List(N,Y,Y,N,N,N,X,D,D,N,N,N,N,N,Y,Y),
+	  PUNKY    -> List(N,Y,Y,Y,Y,N,N,D,D,N,N,N,Y,N,N,Y))
   val fcvt_hd: Array[(BitPat, List[BitPat])] =
     Array(FCVT_H_D -> List(N,Y,Y,N,N,N,X,D,H,N,N,Y,N,N,N,Y),
           FCVT_D_H -> List(N,Y,Y,N,N,N,X,H,D,N,N,Y,N,N,N,Y))
