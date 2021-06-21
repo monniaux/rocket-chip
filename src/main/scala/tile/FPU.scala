@@ -620,7 +620,7 @@ class FPToFP(val latency: Int)(implicit p: Parameters) extends FPUModule()(p) wi
     }
   }
 
-  when (in.bits.wflags && !in.bits.ren2) { // fcvt
+  when (in.bits.wflags && !in.bits.ren2 && !in.bits.ren3) { // fcvt
     if (floatTypes.size > 1) {
       // widening conversions simply canonicalize NaN operands
       val widened = Mux(maxType.isNaN(in.bits.in1), maxType.qNaN, in.bits.in1)
@@ -640,6 +640,11 @@ class FPToFP(val latency: Int)(implicit p: Parameters) extends FPUModule()(p) wi
         mux.exc := narrower.io.exceptionFlags
       }
     }
+  }
+
+  when(in.bits.ren3) { // fcmov
+    val isnan2 = maxType.isNaN(in.bits.in2)
+    mux.data := Mux(isnan2, in.bits.in1, in.bits.in3)
   }
 
   io.out <> Pipe(in.valid, mux, latency-1)
