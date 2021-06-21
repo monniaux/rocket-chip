@@ -154,7 +154,26 @@ class FPUDecoder(implicit p: Parameters) extends FPUModule()(p) {
           FNMSUB_D -> List(N,Y,Y,Y,Y,N,N,D,D,N,N,N,Y,N,N,Y),
           FDIV_D   -> List(N,Y,Y,Y,N,N,N,D,D,N,N,N,N,Y,N,Y),
           FSQRT_D  -> List(N,Y,Y,N,N,N,X,D,D,N,N,N,N,N,Y,Y),
-	  PUNKY    -> List(N,Y,Y,Y,Y,N,N,D,D,N,N,N,Y,N,N,Y))
+	  PUNKY    -> // List(N,Y,Y,Y,Y,N,N,D,D,N,N,N,Y,N,N,Y) fmadd
+	              List(N,Y,Y,Y,Y,N,N,D,D,N,N,Y,N,N,N,N))
+
+  // val ldst = Bool()
+  // val wen = Bool()
+  // val ren1 = Bool()
+  // val ren2 = Bool()
+  // val ren3 = Bool()
+  // val swap12 = Bool()
+  // val swap23 = Bool()
+  // val typeTagIn = UInt(2.W)
+  // val typeTagOut = UInt(2.W)
+  // val fromint = Bool()
+  // val toint = Bool()
+  // val fastpipe = Bool()
+  // val fma = Bool()
+  // val div = Bool()
+  // val sqrt = Bool()
+  // val wflags = Bool()
+	 
   val fcvt_hd: Array[(BitPat, List[BitPat])] =
     Array(FCVT_H_D -> List(N,Y,Y,N,N,N,X,D,H,N,N,Y,N,N,N,Y),
           FCVT_D_H -> List(N,Y,Y,N,N,N,X,H,D,N,N,Y,N,N,N,Y))
