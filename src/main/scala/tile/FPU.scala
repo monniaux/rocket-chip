@@ -643,8 +643,8 @@ class FPToFP(val latency: Int)(implicit p: Parameters) extends FPUModule()(p) wi
   }
 
   when(in.bits.ren3) { // fcmov
-    val isnan2 = maxType.isNaN(in.bits.in2)
-    mux.data := Mux(isnan2, in.bits.in1, in.bits.in3)
+    val isneg = in.bits.in2(maxType.exp + maxType.sig)
+    mux.data := Mux(isneg, in.bits.in1, in.bits.in3)
   }
 
   io.out <> Pipe(in.valid, mux, latency-1)
